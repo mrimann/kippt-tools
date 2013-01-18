@@ -48,14 +48,20 @@ class kipptBackup {
 		$apiResult = curl_exec($ch);
 		curl_close($ch);
 
-		print_r($apiResult);
-
 		// decode the JSON data
 		$apiData = json_decode($apiResult);
-		print_r($apiData);
 
-		foreach ($apiData->objects as $clip) {
-			$this->compareOrImportClip($clip);
+		// See if the response contains some kind of a message - usually a hint that something
+		// went horribly wrong
+		if (isset ($apiData->message)) {
+			echo 'Something went wrong:' . "\n";
+			exit($apiData->message . "\n");
+		}
+
+		if (isset($apiData->objects)) {
+			foreach ($apiData->objects as $clip) {
+				$this->compareOrImportClip($clip);
+			}
 		}
 
 
