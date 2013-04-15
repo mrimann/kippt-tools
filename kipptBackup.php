@@ -101,7 +101,6 @@ class kipptBackup {
 				', url="' . $clip->url .'"' .
 				', list="' . $clip->list .'"' .
 				', notes="' . $clip->notes .'"' .
-				', is_starred="' . (int)$clip->is_starred .'"' .
 				', url_domain="' . $clip->url_domain .'"' .
 				', created="' . $clip->created .'"' .
 				', updated="' . $clip->updated .'"' .

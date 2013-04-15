@@ -4,7 +4,6 @@ CREATE TABLE `clips` (
 	`url` varchar(255) DEFAULT NULL,
 	`list` varchar(255) DEFAULT NULL,
 	`notes` text,
-	`is_starred` tinyint(4) DEFAULT NULL,
 	`url_domain` tinytext,
 	`created` int(11) DEFAULT NULL,
 	`updated` int(11) DEFAULT NULL,
