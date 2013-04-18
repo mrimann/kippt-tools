@@ -14,7 +14,7 @@ Just clone this repository, create a database with a table called "clips" (see d
 
     php -f kipptBackup.php
 
-You can find your kipp.com API-Token by visiting the following "page" with your browser while being logged in: https://kippt.com/api/account
+You can find your kippt.com API-Token by visiting the following "page" with your browser while being logged in: https://kippt.com/api/account
 
 Feedback?
 ---------
