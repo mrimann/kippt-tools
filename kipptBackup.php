@@ -73,11 +73,11 @@ class kipptBackup {
                 $stat_updated = 0;
                 $stat_new = 0;
                 
-		/** progress displayed in % **/        
-		$progresspc = round(($offset / $count * 100), 2);
-
                 // loop through clips
                 while ($offset <= $count) {
+		
+			/** progress displayed in % **/        
+			$progresspc = round(($offset / $count * 100), 2);
 
                         // display progress in %
                         echo "Progress : " . $progresspc . "%\n";
