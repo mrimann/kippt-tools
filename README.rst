@@ -20,7 +20,7 @@ Contributors
 ------------
 The following persons have supported the kippt-tools development:
 
-- [Sébastien Wains](https://github.com/sebw)
+- Sébastien Wains, https://github.com/sebw
 	- Fetching of clips in batches
 	- Showing some nice progress
 
