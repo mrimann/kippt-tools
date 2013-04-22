@@ -8,6 +8,17 @@ class kipptBackup {
 	var $dbUser;
 	var $dbPass;
 
+	// limit of clips to fetch per run, API limit is 200
+	var $limit = 4;
+
+	// the total count of clips the API delivers
+	var $totalCount;
+
+	// counters for the statistics
+	var $countUpToDate = 0;
+	var $countUpdated = 0;
+	var $countNew = 0;
+
 	public function setUsername($userName) {
 		$this->userName = $userName;
 	}
@@ -25,11 +36,8 @@ class kipptBackup {
 	public function createBackup() {
 		$this->connectToDatabase();
 
-		echo 'Trying with kipp.com User "' . $this->userName . '" and API-Token "' . $this->apiToken . '"';
-		echo "\n\n";
-
-
-		$ch = curl_init('https://kippt.com/api/clips/');
+		// get total number of clips
+		$ch = curl_init('https://kippt.com/api/clips/?limit=1&offset=0');
 
 		curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
 		curl_setopt($ch, CURLOPT_HEADER, false);
@@ -55,30 +63,84 @@ class kipptBackup {
 			exit($apiData->message . "\n");
 		}
 
-		if (isset($apiData->objects)) {
-			foreach ($apiData->objects as $clip) {
-				$this->compareOrImportClip($clip);
+		// store the total number of clips
+		$this->totalCount = $apiData->meta->total_count;
+
+		// starting to fetch clips
+		$offset = 0;
+		echo 'Backing up ' . $this->totalCount . ' kippt.com bookmarks for user ' . $this->userName;
+		echo "\n";
+
+
+		// Do some requests to the API to fetch the clips in batches
+		while ($offset <= $this->totalCount) {
+
+			// calculate progress in percent
+			$progress = round(
+				($offset / $this->totalCount * 100),
+				1
+			);
+			echo "\n" . 'Progress : ' . $progress . '%';
+
+			// fetch the next batch of clips from the API
+			$ch = curl_init('https://kippt.com/api/clips/?limit=' . $this->limit . '&offset=' . $offset);
+
+			curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+			curl_setopt($ch, CURLOPT_HEADER, false);
+			curl_setopt(
+				$ch,
+				CURLOPT_HTTPHEADER,
+				array(
+					'X-Kippt-Username: ' . $this->userName,
+					'X-Kippt-API-Token: ' . $this->apiToken
+				)
+			);
+
+			$apiResult = curl_exec($ch);
+			curl_close($ch);
+
+			// decode the JSON data
+			$apiData = json_decode($apiResult);
+
+			// See if the response contains some kind of a message - usually a hint that something
+			// went horribly wrong
+			if (isset ($apiData->message)) {
+				echo 'Something went wrong:' . "\n";
+				exit($apiData->message . "\n");
+			}
+
+			if (isset($apiData->objects)) {
+				foreach ($apiData->objects as $clip) {
+					$this->compareOrImportClip($clip);
+				}
+			}
+
+			$offset = $offset + $this->limit;
+			if ($offset >= $this->totalCount) {
+				echo "\n" . 'Progress : 100%' . "\n\n";
+				echo 'Backup statistics:' . "\n";
+				echo '------------------' . "\n";
+				echo 'New       : ' . $this->countNew . "\n";
+				echo 'Updated   : ' . $this->countUpdated . "\n";
+				echo 'Unchanged : ' . $this->countUpToDate . "\n\n";
 			}
 		}
-
-
 	}
 
 	private function compareOrImportClip($clip) {
-		echo 'checking clip with ID=' . $clip->id;
-
 		$dbResult = mysql_query('SELECT id,updated FROM clips WHERE id=' . $clip->id);
 		if (mysql_num_rows($dbResult) == 1) {
-			echo "\n" . 'Clip exists already';
+			$this->countUpToDate++;
 
 			$row = mysql_fetch_assoc($dbResult);
 			if ($row['updated'] < $clip->updated) {
-				echo "\n" . 'Clip exists, but seems to have changed, trying to update...';
+				$this->countUpdated++;
+				echo "\n" . 'Updating clip ID ' . $clip->id;
 				$this->updateExistingClip($clip);
 			}
-
 		} else {
-			echo "\n" . 'New clip, inserting';
+			echo "\n" . 'Inserting clip ID ' . $clip->id;
+			$this->countNew++;
 			$this->insertNewClip($clip);
 		}
 
@@ -115,8 +177,8 @@ class kipptBackup {
 		mysql_select_db($this->dbName);
 		mysql_query('SET NAMES utf8;');
 	}
-}
 
+}
 
 $backup = new kipptBackup();
 
