@@ -16,6 +16,16 @@ Just clone this repository, create a database with a table called "clips" (see d
 
 You can find your kippt.com API-Token by visiting the following "page" with your browser while being logged in: https://kippt.com/api/account
 
+Contributors
+------------
+The following persons have supported the kippt-tools development:
+
+- Sébastien Wains, @sebw
+	- Fetching of clips in batches
+	- Showing some nice progress
+
+Thanks for your contribution!
+
 Feedback?
 ---------
 Please yes - just send it to mario@rimann.org and let's see what I can make out of it. Of course nice "thank you" mails are appreciated most :-)
