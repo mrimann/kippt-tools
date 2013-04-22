@@ -97,10 +97,10 @@ class kipptBackup {
 
 	private function insertNewClip($clip) {
 		$importResult = mysql_query('INSERT into clips SET id="' . $clip->id .
-				'", title="' . $clip->title .'"' .
+				'", title="' . addslashes($clip->title) .'"' .
 				', url="' . $clip->url .'"' .
 				', list="' . $clip->list .'"' .
-				', notes="' . $clip->notes .'"' .
+				', notes="' . addslashes($clip->notes) .'"' .
 				', url_domain="' . $clip->url_domain .'"' .
 				', created="' . $clip->created .'"' .
 				', updated="' . $clip->updated .'"' .
