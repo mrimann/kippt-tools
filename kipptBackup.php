@@ -1,7 +1,4 @@
 <?php
-/**
- */
-
 
 class kipptBackup {
 	var $userName;
@@ -85,13 +82,10 @@ class kipptBackup {
 			$this->insertNewClip($clip);
 		}
 
-		echo "\n\n";
-
 	}
 
 	private function updateExistingClip($clip) {
 		mysql_query('DELETE from clips WHERE id=' . $clip->id . ' LIMIT 1;');
-
 		$this->insertNewClip($clip);
 	}
 
@@ -127,8 +121,8 @@ class kipptBackup {
 $backup = new kipptBackup();
 
 // modify to suit your needs
-$backup->setUsername('johndoe');
 $backup->setApiToken('123456abcdef');
+$backup->setUsername('kippt_username');
 $backup->setDatabaseCredentials(
 	'name of your local database',
 	'database username',
@@ -136,6 +130,5 @@ $backup->setDatabaseCredentials(
 );
 
 $backup->createBackup();
-
 
 ?>
