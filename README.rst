@@ -1,6 +1,6 @@
 What's this all about?
 ----------------------
-I started playing arount with kippt.com which looks promising as a successor for the beloved del.icio.us which (since acquired by that big company) lost a lot of the power that I liked. And since I already had a del.icio.us to MySQL-Backup script in place, I thought something like that needs to be possible with kippt.com, too.
+I started playing around with kippt.com which looks promising as a successor for the beloved del.icio.us which (since acquired by that big company) lost a lot of the power that I liked. And since I already had a del.icio.us to MySQL-Backup script in place, I thought something like that needs to be possible with kippt.com, too.
 
 And here we go: A rough first draft of a kippt.com backup script - maybe a migration tool from del.icio.us to kippt.com will follow.
 
@@ -14,7 +14,7 @@ Just clone this repository, create a database with a table called "clips" (see d
 
     php -f kipptBackup.php
 
-You can find your kipp.com API-Token by visiting the following "page" with your browser while being logged in: https://kippt.com/api/account
+You can find your kippt.com API-Token by visiting the following "page" with your browser while being logged in: https://kippt.com/api/account
 
 Feedback?
 ---------
