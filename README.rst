@@ -10,11 +10,15 @@ Backing up all your kippt.com bookmarks to MySQL:
 
 How to do?
 ..........
-Just clone this repository, create a database with a table called "clips" (see database schema file in the cloned directory), enter your local database credentials together with your kippt.com username and API-Token in the bottom of the script called "kipptBackup.php" and then run the following code on your shell:
+1. Clone this repository
 
-    php -f kipptBackup.php
+2. Create a database with a table called "clips" (see database schema file in the cloned directory)
 
-You can find your kippt.com API-Token by visiting the following "page" with your browser while being logged in: https://kippt.com/api/account
+3. Copy config.sample.php to config.php and enter your local database credentials together with your kippt.com username and API-Token
+   You can find your kippt.com API-Token by visiting the following "page" with your browser while being logged in: https://kippt.com/api/account
+
+4. Run the script : php -f kipptBackup.php
+
 
 Feedback?
 ---------

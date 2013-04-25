@@ -2,6 +2,8 @@
 
 /** deps : php5 php5-curl php5-mysql **/
 
+include 'config.php';
+
 class kipptBackup {
         var $userName;
         var $apiToken;
@@ -140,12 +142,12 @@ class kipptBackup {
                         if ($row['updated'] < $clip->updated) {
                                 global $stat_updated;
                                 $stat_updated=$stat_updated+1;
-                                echo "\n" . 'Updating clip ID ' . $clip->id;
+                                echo '--> Updating clip ID ' . $clip->id . "\n";
                                 $this->updateExistingClip($clip);
                         }
 
                 } else {
-                        echo "\n" . 'Inserting clip ID ' . $clip->id;
+                        echo '--> Inserting clip ID ' . $clip->id . "\n";
                         global $stat_new;
                         $stat_new=$stat_new+1;
                         $this->insertNewClip($clip);
@@ -190,12 +192,12 @@ class kipptBackup {
 $backup = new kipptBackup();
 
 // modify to suit your needs
-$backup->setUsername('kippt_username');
-$backup->setApiToken('1234567890');
+$backup->setUsername("$kippt_username");
+$backup->setApiToken("$kippt_apitoken");
 $backup->setDatabaseCredentials(
-        'db_name',
-        'db_user',
-        'db_pwd'
+        "$mysql_schema",
+        "$mysql_username",
+        "$mysql_password"
 );
 
 $backup->createBackup();
