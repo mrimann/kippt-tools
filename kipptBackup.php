@@ -180,17 +180,20 @@ class kipptBackup {
 
 }
 
-$backup = new kipptBackup();
+// include the config from external file
+include 'config.php';
 
-// modify to suit your needs
-$backup->setApiToken('123456abcdef');
-$backup->setUsername('kippt_username');
+// Instaniate the backup object
+$backup = new kipptBackup();
+$backup->setUsername($kipptUsername);
+$backup->setApiToken($kipptApiToken);
 $backup->setDatabaseCredentials(
-	'name of your local database',
-	'database username',
-	'database password'
+	$dbName,
+	$dbUser,
+	$dbPass
 );
 
+// Go and execute the backup
 $backup->createBackup();
 
 ?>
