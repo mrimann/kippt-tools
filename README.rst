@@ -32,9 +32,9 @@ Thanks for your contribution!
 
 Feedback?
 ---------
-Please yes - just send it to mario@rimann.org and let's see what I can make out of it. Of course nice "thank you" mails are appreciated most :-)
+Please yes - just send it to mario@rimann.org and let's see what I can make out of it. Of course nice "thank you" mails are appreciated most :-) For other ideas on how to support me, just have a look at http://rimann.org/support
 
 
 Found a bug or want an additional feature?
 ------------------------------------------
-Don't worry, just open an issue on GitHub (https://github.com/mrimann/kippt-tools/issues) or even better: Fix it and contribute it back to the project. You can fork the sourcecode from the Git repository and send me a pull request as soon as you've finished (I have to find out how to work with this first, you might be the first contributor)
+Don't worry, just open an issue on GitHub (https://github.com/mrimann/kippt-tools/issues) or even better: Fix it and contribute it back to the project. You can fork the sourcecode from the Git repository and send me a pull request as soon as you've finished.
