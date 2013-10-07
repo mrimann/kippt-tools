@@ -9,7 +9,7 @@ class kipptBackup {
 	var $dbPass;
 
 	// limit of clips to fetch per run, API limit is 200
-	var $limit = 4;
+	var $limit = 20;
 
 	// the total count of clips the API delivers
 	var $totalCount;
@@ -63,68 +63,74 @@ class kipptBackup {
 			exit($apiData->message . "\n");
 		}
 
-		// store the total number of clips
-		$this->totalCount = $apiData->meta->total_count;
-
 		// starting to fetch clips
 		$offset = 0;
-		echo 'Backing up ' . $this->totalCount . ' kippt.com bookmarks for user ' . $this->userName;
+		echo 'Backing up all kippt.com bookmarks for user ' . $this->userName;
 		echo "\n";
 
 
 		// Do some requests to the API to fetch the clips in batches
-		while ($offset <= $this->totalCount) {
+		$run = 1;
+		$apiData = $this->fetchClips($this->limit, 0);
 
-			// calculate progress in percent
-			$progress = round(
-				($offset / $this->totalCount * 100),
-				1
-			);
-			echo "\n" . 'Progress : ' . $progress . '%';
-
-			// fetch the next batch of clips from the API
-			$ch = curl_init('https://kippt.com/api/clips/?limit=' . $this->limit . '&offset=' . $offset);
-
-			curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
-			curl_setopt($ch, CURLOPT_HEADER, false);
-			curl_setopt(
-				$ch,
-				CURLOPT_HTTPHEADER,
-				array(
-					'X-Kippt-Username: ' . $this->userName,
-					'X-Kippt-API-Token: ' . $this->apiToken
-				)
-			);
-
-			$apiResult = curl_exec($ch);
-			curl_close($ch);
-
-			// decode the JSON data
-			$apiData = json_decode($apiResult);
-
-			// See if the response contains some kind of a message - usually a hint that something
-			// went horribly wrong
-			if (isset ($apiData->message)) {
-				echo 'Something went wrong:' . "\n";
-				exit($apiData->message . "\n");
-			}
-
+		while (count($apiData->objects) > 0) {
 			if (isset($apiData->objects)) {
 				foreach ($apiData->objects as $clip) {
 					$this->compareOrImportClip($clip);
 				}
 			}
 
-			$offset = $offset + $this->limit;
-			if ($offset >= $this->totalCount) {
-				echo "\n" . 'Progress : 100%' . "\n\n";
-				echo 'Backup statistics:' . "\n";
-				echo '------------------' . "\n";
-				echo 'New       : ' . $this->countNew . "\n";
-				echo 'Updated   : ' . $this->countUpdated . "\n";
-				echo 'Unchanged : ' . $this->countUpToDate . "\n\n";
-			}
+			// fetch the next stuff
+			$offset = $run * $this->limit;
+			$apiData = $this->fetchClips($this->limit, $offset);
+			$run++;
 		}
+		echo "\n";
+		echo 'Backup statistics:' . "\n";
+		echo '------------------' . "\n";
+		echo 'New       : ' . $this->countNew . "\n";
+		echo 'Updated   : ' . $this->countUpdated . "\n";
+		echo 'Unchanged : ' . $this->countUpToDate . "\n\n";
+
+	}
+
+	/**
+	 * Fetches a bunch of clips from the kippt API and return the result
+	 * as decoded array (no json anymore)
+	 *
+	 * @param int the limit (number of clips to fetch)
+	 * @param int the offset
+	 * @return array
+	 */
+	private function fetchClips($limit, $offset) {
+		// fetch the next batch of clips from the API
+		$ch = curl_init('https://kippt.com/api/clips/?limit=' . $limit . '&offset=' . $offset);
+
+		curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+		curl_setopt($ch, CURLOPT_HEADER, false);
+		curl_setopt(
+			$ch,
+			CURLOPT_HTTPHEADER,
+			array(
+				'X-Kippt-Username: ' . $this->userName,
+				'X-Kippt-API-Token: ' . $this->apiToken
+			)
+		);
+
+		$apiResult = curl_exec($ch);
+		curl_close($ch);
+
+		// decode the JSON data
+		$apiData = json_decode($apiResult);
+
+		// See if the response contains some kind of a message - usually a hint that something
+		// went horribly wrong
+		if (isset ($apiData->message)) {
+			echo 'Something went wrong:' . "\n";
+			exit($apiData->message . "\n");
+		}
+
+		return $apiData;
 	}
 
 	private function compareOrImportClip($clip) {
