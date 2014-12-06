@@ -1,3 +1,9 @@
+Note on the project status!
+---------------------------
+This project is still here, and as far as I know the script still works. But as I don't use Kippt anymore at the very moment, I also don't use this script.
+** This Project is not actively maintained aynmore!** Feel free to submit bugfixes/changes and I'll try to apply them - but I won't fix bugs or add features for now.
+
+
 What's this all about?
 ----------------------
 I started playing around with kippt.com which looks promising as a successor for the beloved del.icio.us which (since acquired by that big company) lost a lot of the power that I liked. And since I already had a del.icio.us to MySQL-Backup script in place, I thought something like that needs to be possible with kippt.com, too.
