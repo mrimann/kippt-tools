@@ -38,3 +38,7 @@ Please yes - just send it to mario@rimann.org and let's see what I can make out 
 Found a bug or want an additional feature?
 ------------------------------------------
 Don't worry, just open an issue on GitHub (https://github.com/mrimann/kippt-tools/issues) or even better: Fix it and contribute it back to the project. You can fork the sourcecode from the Git repository and send me a pull request as soon as you've finished.
+
+License
+-------
+Licensed under the permissive MIT license (http://opensource.org/licenses/MIT) - have fun with it!
